@@ -3,7 +3,7 @@ Anime Girls Holding Programming Books
 
 
 
-# Contribution Guide Lines
+# Contribution Guidelines
 
 * Images must have descriptive file names in the following format:
 
