@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anime-Girls-Holding-Programming-Books</title>
+  <link rel="stylesheet" href="https://unpkg.com/@zeit-ui/vue@2.5.0-canary.3/dist/zeit-ui.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <div class="zi-main zi-layout" id="app">
+    <h3>{{ title }}</h3>
+    <div class="row" style="font-size:14px;text-transform:uppercase;height:1rem;display: flex;align-items: center;margin-bottom: 20px;">
+      <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none" shape-rendering="geometricPrecision" style="color:currentColor"><path d="M13 17l5-5-5-5"></path><path d="M6 17l5-5-5-5"></path></svg>
+      <span></span>
+      {{ "current lang" }}
+      <span style="margin-right: 6px;display: inline-block;"></span>
+      <div class="zi-select-container small">
+        <select v-model="curr" class="zi-select">
+          <option v-for="item in langs" :key="item.sha" :value="item.path">{{ item.path }}</option>
+        </select>
+        <!-- <i class="arrow zi-icon-up"></i> -->
+      </div>
+    </div>
+    <div class="tabs">
+      <div class="tab" v-for="(item, index) in currLangPic" :key="index">
+        <img style="border-radius: 6px;" :src="item['full']" />
+      </div>
+    </div>
+  </div>
+</body>
+<script src="./main.js"></script>
+</html>
