@@ -1,10 +1,6 @@
 # Anime-Girls-Holding-Programming-Books
 Anime Girls Holding Programming Books
 
-# NOTICE
-**Im changing my username to layn on the 14th October, the link for the for the repo will change so if youre using it anywhere and still want it to work make sure to update it**
-
-
 # Contribution Guidelines
 
 * Images must have descriptive file names in the following format:
