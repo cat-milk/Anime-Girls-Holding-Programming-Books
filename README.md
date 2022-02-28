@@ -1,5 +1,5 @@
 # Anime-Girls-Holding-Programming-Books
-Anime Girls Holding Programming Books
+Awesome picture of cute Anime Girls Holding Programming Books
 
 # Contribution Guidelines
 
