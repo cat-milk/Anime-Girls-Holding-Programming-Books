@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import re
 import shutil
 from urllib.parse import quote
 
@@ -10,8 +11,6 @@ README_MD = ['README.md', 'readme.md', 'index.md']
 INDEX_FILE = 'index.md'
 
 IMAGE_EXTS = ['jpg', 'png', 'svg', 'jpeg', 'gif', 'webp']
-IMAGE_URL_PREFIX = 'https://github.com/beiyuouo/hainanu-course-comments/blob/main/'
-BIN_URL_PREFIX = 'https://github.com/beiyuouo/hainanu-course-comments/raw/main/'
 
 
 def list_image(course: str):
@@ -23,7 +22,14 @@ def list_image(course: str):
         level = root.replace(course, '').count(os.sep)
         for f in files:
             if f.split('.')[-1].lower() in IMAGE_EXTS:
-                imagelist_text += '![]({}){{ width="200" }}\n'.format(os.path.join(f))
+                imagelist_text += '<figure markdown>\n'
+                imagelist_text += '![]({})'.format(os.path.join(f))
+                imagelist_text += '{ width="300" }\n'
+                imagelist_text += '<figcaption>{}</figcaption>\n'.format(' '.join(
+                    re.split(r'[-_\s]+',
+                             os.path.splitext(os.path.basename(f))[0])))
+                imagelist_text += '</figure>\n'
+
     return imagelist_text, readme_path
 
 
