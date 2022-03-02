@@ -1,0 +1,28 @@
+site_name: Anime-Girls-Holding-Programming-Books
+
+theme:
+  name: material
+  custom_dir: overrides
+  features:
+    - navigation.indexes
+
+repo_url: https://github.com/cat-milk/Anime-Girls-Holding-Programming-Books
+
+markdown_extensions:
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - attr_list
+  - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
+plugins:
+  - search:
+      lang:
+        - en
+extra:
+  analytics:
+    provider: google
+    property: UA-145083103-1
