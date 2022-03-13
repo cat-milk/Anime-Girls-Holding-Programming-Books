@@ -1,0 +1,46 @@
+{
+  "name": "anime-girls-holding-programming-books",
+  "version": "1.0.0",
+  "private": true,
+  "description": "anime-girls-holding-programming-books",
+  "keywords": [
+    "gatsby"
+  ],
+  "scripts": {
+    "develop": "gatsby develop",
+    "start": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mdx-js/mdx": "^1.6.22",
+    "@mdx-js/react": "^1.6.22",
+    "gatsby": "^4.9.0",
+    "gatsby-plugin-image": "^2.9.1",
+    "gatsby-plugin-mdx": "^3.9.0",
+    "gatsby-plugin-postcss": "^5.9.0",
+    "gatsby-plugin-react-helmet": "^5.9.0",
+    "gatsby-plugin-sharp": "^4.9.1",
+    "gatsby-plugin-sitemap": "^5.9.0",
+    "gatsby-source-filesystem": "^4.9.1",
+    "gatsby-transformer-sharp": "^4.9.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-helmet": "^6.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.14",
+    "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
+    "autoprefixer": "^10.4.2",
+    "gh-pages": "^3.2.3",
+    "postcss": "^8.4.8",
+    "tailwindcss": "^3.0.23",
+    "typescript": "^4.5.5"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  }
+}
