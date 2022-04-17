@@ -1,8 +1,7 @@
-import React, { createContext, useMemo, useState } from 'react';
-import AnimeImageGrid from '../components/AimeImageGrid';
+import React, { createContext, useCallback, useMemo, useState } from 'react';
 import { useAnimeImages } from '../hooks/useAnimeImages';
 import { useDirectories } from '../hooks/useDirectories';
-import { ImageFiles } from '../types';
+import { AllImages } from '../types';
 
 // styles
 const pageStyles = {
@@ -10,29 +9,31 @@ const pageStyles = {
   padding: 96,
   fontFamily: '-apple-system, Roboto, sans-serif, serif',
 };
-const headingStyles = {
-  marginTop: 0,
-  marginBottom: 64,
-  maxWidth: 320,
-};
-const headingAccentStyles = {
-  color: '#663399',
-};
 
-const linkStyle = {
-  color: '#8954A8',
-  fontWeight: 'bold',
-  fontSize: 16,
-  verticalAlign: '5%',
-};
-
-export const ImagesContext = createContext<ImageFiles | undefined>(undefined);
-// markup
+export const ImagesContext = createContext<AllImages | undefined>(undefined);
 const Layout: React.FC = ({ children }) => {
   const directories = useDirectories();
   const allImages = useAnimeImages();
-  console.log(allImages);
-  const images = useMemo(() => allImages, [allImages]);
+  const [selectedDir, setSelectedDir] = useState('');
+
+  const images = useMemo(() => {
+    const desu: typeof allImages = {
+      edges: [],
+    };
+    if (allImages && allImages.edges) {
+      if (selectedDir === '') {
+        return allImages;
+      }
+      desu.edges = allImages.edges.filter(({ node }) => {
+        return selectedDir === node.relativeDirectory;
+      });
+    }
+    return desu;
+  }, [allImages, selectedDir]);
+
+  const handleDirSelect = useCallback((relativePath: string) => {
+    setSelectedDir(relativePath);
+  }, []);
 
   return (
     <ImagesContext.Provider value={images}>
@@ -40,8 +41,23 @@ const Layout: React.FC = ({ children }) => {
         <nav className="flex flex-col w-2/12 h-screen overflow-y-scroll space-y-2 px-6">
           {directories.allDirectory.edges.map(({ node }: any) => (
             <span
-              className="p-2 hover:bg-indigo-500 hover:text-white transition-colors duration-300 rounded-md cursor-pointer"
-              onClick={() => {}}
+              className={`
+                p-2
+                hover:bg-indigo-500
+                hover:text-white
+                transition-colors
+                duration-300
+                rounded-md
+                cursor-pointer
+                ${
+                  node.relativePath === selectedDir
+                    ? 'bg-indigo-500 text-white'
+                    : ''
+                }
+              `}
+              onClick={_event => {
+                handleDirSelect(node.relativePath);
+              }}
             >
               {node.name}
             </span>

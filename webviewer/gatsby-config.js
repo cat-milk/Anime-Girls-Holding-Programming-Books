@@ -3,6 +3,7 @@ module.exports = {
   siteMetadata: {
     title: ``,
     siteUrl: `https://www.yourdomain.tld`,
+    pathPrefix: '/Anime-Girls-Holding-Programming-Books',
   },
   plugins: [
     'gatsby-plugin-postcss',

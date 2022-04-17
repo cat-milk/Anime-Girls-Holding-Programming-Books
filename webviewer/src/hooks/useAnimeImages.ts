@@ -1,28 +1,35 @@
 import { useStaticQuery, graphql } from 'gatsby';
-import { Directories, ImageFiles } from '../types';
+import { AllImages, ImageQueryResponse } from '../types';
 
-const useAnimeImages = (): ImageFiles => {
-  const data = useStaticQuery(graphql`
+const useAnimeImages = (): AllImages => {
+  const { allImages }: ImageQueryResponse = useStaticQuery(graphql`
     query {
-      allImages: allFile(sort: { order: ASC, fields: relativeDirectory }) {
+      allImages: allFile(
+        sort: { order: ASC, fields: relativeDirectory }
+        filter: { sourceInstanceName: { eq: "images" } }
+      ) {
         edges {
           node {
             name
+            base
             id
-            relativePath
+            relativeDirectory
             childImageSharp {
               gatsbyImageData(
-                width: 400
+                width: 800
                 placeholder: TRACED_SVG
-                formats: [AUTO, WEBP, AVIF]
+                formats: [AUTO, JPG, PNG, AVIF]
               )
+              original {
+                src
+              }
             }
           }
         }
       }
     }
   `);
-  return data;
+  return allImages;
 };
 
 export { useAnimeImages };

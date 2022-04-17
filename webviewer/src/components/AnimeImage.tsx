@@ -5,15 +5,16 @@ import { ImageFile } from '../types';
 
 interface AnimeImageProps {
   image: any;
+  onClick: () => void;
 }
 
-const AnimeImage: React.FC<AnimeImageProps> = ({ image }) => {
+const AnimeImage: React.FC<AnimeImageProps> = ({ image, onClick }) => {
   const pic = getImage(image);
   return (
     <div
       key={image.id}
-      className="relative group inline-block"
-      style={{ height: pic?.height, width: pic?.width }}
+      className="relative group col-span-1 h-96"
+      onClick={onClick}
     >
       <div
         className="
@@ -37,7 +38,14 @@ const AnimeImage: React.FC<AnimeImageProps> = ({ image }) => {
           <span className="break-all">{image.name.replace(/_/g, ' ')}</span>
         </span>
       </div>
-      <GatsbyImage image={pic} alt={image.name} title={image.name} />
+      <GatsbyImage
+        className="h-full"
+        image={pic}
+        alt={image.name}
+        title={image.name}
+        height={'100%'}
+        width={'100%'}
+      />
     </div>
   );
 };
