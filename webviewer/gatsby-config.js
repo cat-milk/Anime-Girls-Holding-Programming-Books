@@ -2,9 +2,9 @@
 module.exports = {
   siteMetadata: {
     title: `Anime Girls Holding Programming Books`,
-    siteUrl: `https://www.yourdomain.tld`,
-    pathPrefix: '/Anime-Girls-Holding-Programming-Books/',
+    siteUrl: `https://cat-milk.github.io/`,
   },
+  pathPrefix: '/Anime-Girls-Holding-Programming-Books/',
   plugins: [
     'gatsby-plugin-postcss',
     'gatsby-plugin-image',
@@ -20,6 +20,7 @@ module.exports = {
         path: `..`,
         ignore: [
           '**/.*',
+          '**/docs',
           '../**/node_modules/**',
           '../node_modules/**',
           '**/webviewer/**',
