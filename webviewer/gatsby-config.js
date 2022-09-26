@@ -1,9 +1,9 @@
 /** @type {import('gatsby').GatsbyConfig} */
 module.exports = {
   siteMetadata: {
-    title: ``,
+    title: `Anime Girls Holding Programming Books`,
     siteUrl: `https://www.yourdomain.tld`,
-    pathPrefix: '/Anime-Girls-Holding-Programming-Books',
+    pathPrefix: '/Anime-Girls-Holding-Programming-Books/',
   },
   plugins: [
     'gatsby-plugin-postcss',

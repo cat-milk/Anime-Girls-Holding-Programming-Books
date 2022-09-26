@@ -18,7 +18,7 @@ const useAnimeImages = (): AllImages => {
               gatsbyImageData(
                 width: 800
                 placeholder: TRACED_SVG
-                formats: [AUTO, JPG, PNG, AVIF]
+                formats: [AUTO, PNG, AVIF]
               )
               original {
                 src
