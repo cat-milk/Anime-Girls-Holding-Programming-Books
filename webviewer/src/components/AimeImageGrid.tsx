@@ -19,7 +19,7 @@ const AnimeImageGrid: React.FC = () => {
               key={node.name}
               onClick={() => {
                 setPhotoIndex(index);
-                setIsOpen(true);
+                //setIsOpen(true);
               }}
             />
           ))}
