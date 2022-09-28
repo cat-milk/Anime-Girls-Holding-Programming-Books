@@ -7,7 +7,7 @@ export interface Directory {
 
 export interface Directories {
   allDirectory: {
-    edges: Directory[];
+    edges: { node: Directory }[];
   };
 }
 
