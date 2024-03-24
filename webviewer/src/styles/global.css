@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.hamburger {
+  width: 100%;
+  height: 100%;
+}
+
+.hamburger__bar {
+  transition-property: transform;
+  transition-duration: 0.3s;
+  transform-origin: center;
+  stroke: black;
+  stroke-width: 10%;
+}
+
+.hamburger__bar--top {
+  transform: translateY(-40%);
+}
+
+.hamburger__bar--bot {
+  transform: translateY(40%);
+}
+
+.is-opened .hamburger__bar--top {
+  transform: rotate(45deg);
+}
+
+.is-opened .hamburger__bar--mid {
+  transform: scaleX(0.1);
+}
+
+.is-opened .hamburger__bar--bot {
+  transform: rotate(-45deg);
+}
