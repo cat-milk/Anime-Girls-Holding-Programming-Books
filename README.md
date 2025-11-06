@@ -12,3 +12,5 @@ Anime Girls Holding Programming Books
 * Add your images to the folder that best describes the subject matter of the book that the girl is holding. If no existing folder applies, create a new one. The simpler the name, the better;
 
 * All characters must be female presenting (either canonically female or look/act like girls).
+
+* This repo does not accept AI generated images. AI generated girls kind of defeat the purpose of this repo since if you can generate bespoke images of anime girls holding programming books whenever you want, then there isn't really a point in having a repo to catalog them.
