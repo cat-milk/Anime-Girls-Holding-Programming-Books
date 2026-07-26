@@ -1,0 +1,90 @@
+name: Normalize image filenames
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '**/*.png'
+      - '**/*.jpg'
+      - '**/*.jpeg'
+      - '**/*.gif'
+      - '**/*.webp'
+      - '**/*.bmp'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  normalize:
+    if: ${{ github.event_name != 'push' || !contains(github.event.head_commit.message, '[skip normalize]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rename non-conforming image files
+        run: |
+          node <<'EOF'
+          const fs = require('fs');
+          const path = require('path');
+
+          const IMAGE_EXT = /\.(png|jpe?g|gif|webp|bmp)$/i;
+          const EXCLUDED_DIRS = new Set(['.git', '.github', 'node_modules']);
+
+          function normalizeBase(base) {
+            const tokens = base.split(/[\s_-]+/).filter(Boolean);
+            const normalized = tokens.map(t =>
+              /^[a-z]+$/.test(t) ? t[0].toUpperCase() + t.slice(1) : t
+            );
+            return normalized.join('_');
+          }
+
+          const topLevel = fs.readdirSync('.', { withFileTypes: true })
+            .filter(e => e.isDirectory() && !e.name.startsWith('.') && !EXCLUDED_DIRS.has(e.name));
+
+          const renamed = [];
+          for (const dirEntry of topLevel) {
+            const dir = dirEntry.name;
+            const entries = fs.readdirSync(dir, { withFileTypes: true });
+            for (const entry of entries) {
+              if (!entry.isFile()) continue;
+              if (!IMAGE_EXT.test(entry.name)) continue;
+
+              const ext = path.extname(entry.name);
+              const base = path.basename(entry.name, ext);
+              const normalizedName = normalizeBase(base) + ext.toLowerCase();
+
+              if (normalizedName === entry.name) continue;
+
+              const oldPath = path.join(dir, entry.name);
+              const newPath = path.join(dir, normalizedName);
+
+              if (fs.existsSync(newPath)) {
+                console.warn(`Skipping ${oldPath}: target ${newPath} already exists`);
+                continue;
+              }
+
+              fs.renameSync(oldPath, newPath);
+              renamed.push(`${oldPath} -> ${newPath}`);
+            }
+          }
+
+          if (renamed.length > 0) {
+            console.log('Renamed files:');
+            renamed.forEach(r => console.log(`  ${r}`));
+          } else {
+            console.log('No files needed renaming.');
+          }
+          EOF
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "chore: normalize image filenames [skip normalize]"
+            git push
+          fi
