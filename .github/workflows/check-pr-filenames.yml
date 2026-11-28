@@ -1,0 +1,94 @@
+name: Check image filename format
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  check-filenames:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check added/renamed image filenames
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const path = require('path');
+
+            const IMAGE_EXT = /\.(png|jpe?g|gif|webp|bmp)$/i;
+            const MARKER = '<!-- filename-check-bot -->';
+
+            function normalizeBase(base) {
+              const tokens = base.split(/[\s_-]+/).filter(Boolean);
+              const normalized = tokens.map(t =>
+                /^[a-z]+$/.test(t) ? t[0].toUpperCase() + t.slice(1) : t
+              );
+              return normalized.join('_');
+            }
+
+            function expectedPath(filename) {
+              const ext = path.extname(filename);
+              const dir = path.dirname(filename);
+              const base = path.basename(filename, ext);
+              const normalized = normalizeBase(base) + ext.toLowerCase();
+              return dir === '.' ? normalized : `${dir}/${normalized}`;
+            }
+
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+
+            const violations = [];
+            for (const f of files) {
+              if (!['added', 'renamed'].includes(f.status)) continue;
+              if (!IMAGE_EXT.test(f.filename)) continue;
+              const dir = path.dirname(f.filename);
+              if (dir === '.' || dir.startsWith('.github')) continue;
+
+              const expected = expectedPath(f.filename);
+              if (expected !== f.filename) {
+                violations.push({ actual: f.filename, expected });
+              }
+            }
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+            });
+            const existing = comments.find(c => c.body.includes(MARKER));
+
+            if (violations.length > 0) {
+              const lines = violations.map(v => `- \`${v.actual}\` → \`${v.expected}\``);
+              const body = `${MARKER}\n### Some image filenames don't match the expected format\n\nExpected format: \`Name_Name_Book_Book.ext\` (words separated by underscores, each word capitalized).\n\nPlease rename:\n\n${lines.join('\n')}\n`;
+
+              if (existing) {
+                await github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: existing.id,
+                  body,
+                });
+              } else {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.payload.pull_request.number,
+                  body,
+                });
+              }
+
+              core.setFailed(`${violations.length} filename(s) don't match the expected format.`);
+            } else if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body: `${MARKER}\n### All image filenames now match the expected format.\n`,
+              });
+            }
